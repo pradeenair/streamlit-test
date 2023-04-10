@@ -14,7 +14,7 @@ SPREADSHEET_ID = "1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk"
 RANGE_NAME = "Sheet1!A:A"
 
 # Set up OpenAI API
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = os.environ["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"]
 
 
 
