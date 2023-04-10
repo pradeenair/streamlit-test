@@ -14,7 +14,7 @@ SPREADSHEET_ID = "1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk"
 RANGE_NAME = "Sheet1!A1:A"  # Adjust according to the column containing the company names
 
 # ChatGPT API setup
-openai.api_key = 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
+openai.api_key = "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"
 
 
 def get_google_sheet_data(spreadsheet_id, range_name):
