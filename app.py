@@ -10,7 +10,7 @@ import streamlit as st
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # Enter your Google Sheet ID and range
-SPREADSHEET_ID = 1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk
+SPREADSHEET_ID = "1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk"
 RANGE_NAME = "Sheet1!A1:A"  # Adjust according to the column containing the company names
 
 # ChatGPT API setup
