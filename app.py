@@ -10,7 +10,7 @@ import json
 
 # Set up API credentials
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-SPREADSHEET_ID = "1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk"
+SPREADSHEET_ID = "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"
 RANGE_NAME = "Sheet1!A:A"
 
 # Set up OpenAI API
