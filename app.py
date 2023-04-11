@@ -1,6 +1,7 @@
-import os
-import openai
 import streamlit as st
+import openai
+import os
+openai.api_key = st.secrets["openai"]["api_key"]
 import google.auth
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
