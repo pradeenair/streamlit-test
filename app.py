@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
-import os
-openai.api_key = st.secrets["openai"]["api_key"]
+
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 import google.auth
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -11,12 +11,8 @@ import json
 
 # Set up API credentials
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-SPREADSHEET_ID = "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"
+SPREADSHEET_ID = "1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk"
 RANGE_NAME = "Sheet1!A:A"
-
-# Set up OpenAI API
-openai.api_key = os.environ["OPENAI_API_KEY"]
-
 
 
 def get_google_sheet_data(spreadsheet_id, range_name):
@@ -73,4 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
