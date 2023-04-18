@@ -1,71 +1,36 @@
+import os
+import gspread
+from google.oauth2.service_account import Credentials
 import streamlit as st
-import openai
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-import google.auth
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from googleapiclient.discovery import build
-import json
-
-# Set up API credentials
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-SPREADSHEET_ID = "1y1M1nzulCTWOSPiZAGh_zVeAHwZ6Z8bgwfY0AvIO4Dk"
-RANGE_NAME = "Sheet1!A:A"
-
-
-def get_google_sheet_data(spreadsheet_id, range_name):
-    creds = None
+def get_google_sheet_data(sheet_id, range_name):
     if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-        creds = Credentials.from_authorized_user_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], SCOPES)
+        # Use the credentials stored in the environment variable
+        credentials = Credentials.from_service_account_info(
+            st.secrets["gcp_service_account"]
+        )
+    else:
+        # Use the credentials stored in a JSON file
+        credentials = Credentials.from_service_account_file(
+            "google-credentials.json",
+            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],
+        )
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open("token.pickle", "wb") as token:
-            pickle.dump(creds, token)
+    client = gspread.authorize(credentials)
+    sheet = client.open_by_key(sheet_id).worksheet(range_name)
+    data = sheet.get_all_values()
 
-    service = build("sheets", "v4", credentials=creds)
-
-    result = (
-        service.spreadsheets()
-        .values()
-        .get(spreadsheetId=spreadsheet_id, range=range_name)
-        .execute()
-    )
-    return result.get("values", [])
-
-
-def check_fortune_1000(company_name):
-    prompt = f"Is {company_name} in the Fortune 1000 list?"
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=prompt,
-        max_tokens=5,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-
-    answer = response.choices[0].text.strip()
-    return answer.lower() == "yes"
-
+    return data
 
 def main():
-    st.title("Fortune 1000 Company Lookup")
+    st.title("Google Sheets Integration Example")
+    
+    # Define your Google Sheets ID and range here
+    SPREADSHEET_ID = "your_google_sheets_id"
+    RANGE_NAME = "your_range_name"
+    
     companies = get_google_sheet_data(SPREADSHEET_ID, RANGE_NAME)
-
-    st.write("### List of Companies:")
-    for company in companies:
-        company_name = company[0]
-        is_fortune_1000 = check_fortune_1000(company_name)
-        status = "Yes" if is_fortune_1000 else "No"
-        st.write(f"{company_name}: {status}")
-
+    st.write(companies)
 
 if __name__ == "__main__":
     main()
